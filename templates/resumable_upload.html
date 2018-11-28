@@ -1,4 +1,7 @@
 <a href="#" id="browseButton">Select files</a>
+<button id="toggle">Pause</button>
+<p>Status: <span id="status">Not Uploading</span></p>
+<p>Progress: <span id="progress">0</span>%</p>
 
 <script src="{{ url_for('static', filename='js/lib/resumable.js') }}"></script>
 <script>
@@ -7,13 +10,27 @@ var r = new Resumable({
   chunkSize: 1*1024*1024,
   simultaneousUploads: 10,
 });
+
+document.getElementById('toggle').addEventListener('click', function() {
+  var status = document.getElementById('status');
+  if (r.isUploading()) {
+    r.pause();
+    this.innerHTML = 'resume';
+    status.innerHTML = 'Paused';
+  } else {
+    r.upload();
+    this.innerHTML = 'pause';
+    status.innerHTML = 'Uploading';
+  }
+});
+
 r.assignBrowse(document.getElementById('browseButton'));
 r.on('fileSuccess', function(file){
     console.debug('fileSuccess',file);
   });
 r.on('fileProgress', function(file){
     console.debug('fileProgress', file);
-    console.log(r.progress())
+    document.getElementById('progress').innerHTML = r.progress()*100;
   });
 r.on('fileAdded', function(file, event){
     r.upload();
@@ -21,6 +38,7 @@ r.on('fileAdded', function(file, event){
   });
 r.on('filesAdded', function(array){
     r.upload();
+    document.getElementById('status').innerHTML = 'Uploading';
     console.debug('filesAdded', array);
   });
 r.on('fileRetry', function(file){
