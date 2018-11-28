@@ -3,4 +3,6 @@
 This is a basic example showing how to use resume.js with a Flask backend
 
 ## Quick Start
-```pipenv install -r requirements.txt```
+```pipenv install```
+```pipenv shell```
+```python app.py```

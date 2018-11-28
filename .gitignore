@@ -1,7 +1,5 @@
 __pycache__
 .envrc
-Pipfile
-Pipfile.lock
 tmp
 .vscode/settings.json
 .vscode/tags
